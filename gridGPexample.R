@@ -58,7 +58,7 @@ lines(xs, ul, type = 'l', lwd = 2, lty = 2)
 
 phoneme <- read.csv("data/phoneme.data")
 
-x <- phoneme[phoneme$g == 'ao',2:257]
+x <- phoneme[phoneme$g == 'aa',2:257]
 #x <- (x - mean(x)) / sd(x)
 
 gGP <- fit.gGP(x, tlim = c(1, 256), maxit = 1000)
@@ -71,3 +71,5 @@ t <- seq(1, 256, length.out = dim(x)[2])
 plot(t, x[1,], pch = 16, cex = .3, ylim = c(min(x), max(x)))
 for (i in 1:dim(x)[1]) { points(t, x[i,], pch = 16, cex = .3)  }
 lines(xs, gppred$mu, type = 'l', lwd = 3, col = 2)
+lines(xs, gppred$ll, type = 'l', lwd = 2, col = 2, lty = 2)
+lines(xs, gppred$ul, type = 'l', lwd = 2, col = 2, lty = 2)
