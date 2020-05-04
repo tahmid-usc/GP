@@ -131,9 +131,19 @@ kxx <- ker(x = tstar, l = theta[1], sigf = theta[2]) + theta[3]^2 * diag(nx)
 k <- ker(x = t, l = theta[1], sigf = theta[2]) + theta[3]^2 * diag(n)
 kinv <- chol2inv(chol(k))
 posmu <- kx %*% (kinv %*% matrix(genY - mu.pred, ncol = 1))
-posmu <- pred + posmu
+posmu <- mustar.pred + posmu
 
 plot(tstar, posmu, type = 'l', lwd = 2, col = 2, main = 'Posterior mean', ylim = c(0,1.1))
 points(t, genY)
 lines(tstar, mutstar, lwd = 2)
 
+possigma <- kxx - kx %*% (kinv %*% t(kx))
+#diag(possigma)[diag(sigma)<0] <- 0
+ll <- posmu - 1.96 * sqrt(diag(possigma))
+ul <- posmu + 1.96 * sqrt(diag(possigma))
+
+plot(tstar, posmu, type = 'l', lwd = 2, col = 2, main = 'Posterior mean', ylim = c(min(ll), max(ul)))
+points(t, genY)
+lines(tstar, mutstar, lwd = 2)
+lines(tstar, ll, lwd = 2, lty = 2)
+lines(tstar, ul, lwd = 2, lty = 2)
